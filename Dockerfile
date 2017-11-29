@@ -9,6 +9,7 @@ ENV PATH $PATH:$GOROOT/bin:$GOPATH/bin
 RUN go get github.com/cs3238-tsuzu/recs4m
 RUN cp $GOPATH/src/github.com/cs3238-tsuzu/recs4m/upload.sh /root
 RUN chmod +x /root/upload.sh
-WORKDIR /root
+WORKDIR $GOPATH/src/github.com/cs3238-tsuzu/recs4m
+EXPOSE 80
 
 CMD ["recs4m"]

@@ -95,6 +95,11 @@ func main() {
 
 	streamURL := flag.String("stream", "http://tsuzu2.cloudapp.net/audio", "MP3 stream path")
 	uploadScript := flag.String("upload-script", "./upload.sh", "path to script for uploading")
+	debug := flag.Bool("debug", false, "Debug output")
+
+	if *debug {
+		logrus.SetLevel(logrus.DebugLevel)
+	}
 
 	tmpl, err := template.New("template").
 		Funcs(template.FuncMap{
@@ -462,12 +467,13 @@ func main() {
 
 		for {
 			<-ticker.C
+			logrus.WithField("time", time.Now().String()).Debug("Ticker event")
 
 			deletedOnce := make([]string, 0, 10)
 			db.View(func(tx *bolt.Tx) error {
 				b := tx.Bucket(ReservationsBucket)
 
-				b.ForEach(func(_, v []byte) error {
+				return b.ForEach(func(_, v []byte) error {
 					var resv Reservation
 					if err := json.Unmarshal(v, &resv); err != nil {
 						return err
@@ -475,6 +481,7 @@ func main() {
 
 					st := NextStartTime(resv)
 
+					logrus.WithField("startTime", st).Debug("Checking")
 					if st.Sub(time.Now()) < 2*time.Minute {
 						if _, ok := recording.Load(resv.ID); !ok {
 							recording.Store(resv.ID, true)
@@ -488,8 +495,6 @@ func main() {
 					}
 					return nil
 				})
-
-				return nil
 			})
 
 			db.Update(func(tx *bolt.Tx) error {
