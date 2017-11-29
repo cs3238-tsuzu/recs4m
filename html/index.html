@@ -33,7 +33,7 @@
             <div class="card w-100">
                 <div class="card-header" role="tab" id="reservation-heading-{{.Index}}">
                     <h5 class="mb-0">
-                        <a data-toggle="collapse" href="#reservation-collapse-{{.Index}}" aria-expanded="true" aria-controls="reservation-collapse-{{.ID}}">
+                        <a data-toggle="collapse" href="#reservation-collapse-{{.Index}}" aria-expanded="true" aria-controls="reservation-collapse-{{.Index}}">
                             {{.Title}}: {{dayOfWeekToString .DayOfWeek}} {{timeToString .StartTime}} - {{timeToString (addDuration .StartTime .Duration)}}
                         </a>
                     </h5>
@@ -86,12 +86,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary" id="submit-{{.ID}}-hidden" hidden>Submit</button>
+                            <button type="submit" class="btn btn-primary" id="submit-{{.Index}}-hidden" hidden>Submit</button>
                         </form>
 
                         <div style="display: flex">
                             <div class="mr-auto">
-                                    <button class="btn btn-primary update-fake-buton" data-action-target="#submit-{{.ID}}-hidden">Update</button>
+                                    <button class="btn btn-primary update-fake-buton" data-action-target="#submit-{{.Index}}-hidden">Update</button>
                             </div>
                             <div>
                                 <button class="btn btn-danger mr-0 remove-button" data-remove-target="{{.ID}}">Remove</button>

@@ -55,6 +55,9 @@ func NextStartTime(resv Reservation) time.Time {
 	for t.Sub(now) <= 0 {
 		t = t.AddDate(0, 0, 7)
 	}
+	for t.AddDate(0, 0, -7).Sub(now) > 0 {
+		t = t.AddDate(0, 0, -7)
+	}
 
 	return t
 }
@@ -97,8 +100,10 @@ func main() {
 	uploadScript := flag.String("upload-script", "./upload.sh", "path to script for uploading")
 	debug := flag.Bool("debug", false, "Debug output")
 
+	flag.Parse()
 	if *debug {
 		logrus.SetLevel(logrus.DebugLevel)
+		logrus.Info("Set to debug level")
 	}
 
 	tmpl, err := template.New("template").
@@ -356,8 +361,6 @@ func main() {
 			return
 		}
 
-		newResv.ID = time.Now().Format(time.RFC3339) + fmt.Sprintf("%03d", rand.Intn(1000))
-
 		encoded, _ := json.Marshal(newResv)
 
 		if err := db.Update(func(tx *bolt.Tx) error {
@@ -391,7 +394,7 @@ func main() {
 					addNewLog(fmt.Sprintf("Failed: %s(from: %s, reason: %s)", resv.Title, startTime.String(), retErr.Error()))
 				}
 			}()
-			defer recording.Delete(resv.ID)
+
 			time.Sleep(time.Now().Add(30 * time.Second).Sub(startTime))
 
 			addNewLog(fmt.Sprintf("Recording started: %s(from: %s)", resv.Title, startTime))
@@ -417,6 +420,7 @@ func main() {
 
 				return
 			}
+			defer fp.Close()
 			buf := make([]byte, 1024)
 			for {
 				n, err := resp.Body.Read(buf)
@@ -445,14 +449,14 @@ func main() {
 			name := fp.Name()
 			fp.Close()
 
-			if err := os.Rename("/tmp"+name, "/tmp"+name+".mp3"); err != nil {
+			if err := os.Rename(name, name+".mp3"); err != nil {
 				retErr = err
 
 				return
 			}
 			resp.Body.Close()
 
-			_, err = exec.Command("sh", "-c", *uploadScript, "/tmp"+name+".mp3", resv.Title, startTime.String()).CombinedOutput()
+			_, err = exec.Command("sh", "-c", *uploadScript, name+".mp3", resv.Title, startTime.String()).CombinedOutput()
 
 			if err != nil {
 				retErr = err
@@ -461,12 +465,16 @@ func main() {
 			}
 
 			addNewLog(fmt.Sprintf("Successfully recorded and uploaded: %s(from: %s)", resv.Title, startTime.String()))
+
+			if err := os.Remove(name); err != nil {
+				logrus.WithError(err).Error("File removing error")
+			}
 		}
 
 		ticker := time.NewTicker(1 * time.Minute)
 
-		for {
-			<-ticker.C
+		logrus.Debug("Main loop has started")
+		for range ticker.C {
 			logrus.WithField("time", time.Now().String()).Debug("Ticker event")
 
 			deletedOnce := make([]string, 0, 10)
@@ -481,7 +489,7 @@ func main() {
 
 					st := NextStartTime(resv)
 
-					logrus.WithField("startTime", st).Debug("Checking")
+					logrus.WithField("reservation", resv).WithField("startTime", st).Debug("Checking a reservation")
 					if st.Sub(time.Now()) < 2*time.Minute {
 						if _, ok := recording.Load(resv.ID); !ok {
 							recording.Store(resv.ID, true)
@@ -490,7 +498,10 @@ func main() {
 								deletedOnce = append(deletedOnce, resv.ID)
 							}
 
-							go asyncRecord(st, resv)
+							go func() {
+								defer recording.Delete(resv.ID)
+								asyncRecord(st, resv)
+							}()
 						}
 					}
 					return nil
