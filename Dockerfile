@@ -1,4 +1,4 @@
-FROM tsuzu:gmusic
+FROM tsuzu/gmusic
 
 WORKDIR /tmp
 RUN wget https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz && tar zxvf go*.tar.gz
