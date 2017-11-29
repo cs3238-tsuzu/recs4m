@@ -6,4 +6,7 @@ RUN mv go* /usr/local/go && RUN mkdir /root/go
 RUN echo 'export GOPATH="/root/go"' >> ~/.bashrc
 RUN echo 'export GOROOT="/usr/local/go"' >> ~/.bashrc
 RUN echo 'export PATH=$GOROOT/bin:$GOPATH/bin:$PATH' >> ~/.bashrc
+RUN go get github.com/cs3238-tsuzu/recs4m
 WORKDIR /root
+
+ENTRYPOINT ["recs4m"]
