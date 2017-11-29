@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
+    <meta charset="utf-8">
+
+    <!--Bootstrap CSS-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <style>
+        #new-reservation {
+            text-align: right;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">recs4m</a>
+    </nav>
+    <div class="container mt-5">
+        <div class="row ml-0 mr-0">
+            <h2>New Reservation</h2>
+        </div>
+        <form action="/new" method="post">
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Title</label>
+                <div class="col-md-10">
+                    <input class="form-control" type="text" value="" name="title">
+                    <div class="mt-1">
+                            <p class="mb-0"><strong>If this form is not filled, the title will be retrieved from the timetable.</strong></p>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Start time</label>
+                <div class="col-md-5">
+                    <select class="form-control" name="dayOfWeek">
+                        <option value="0">Sunday</option>
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                        <option value="6">Saturday</option>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <input class="form-control" type="time" value="" name="startTime">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Duration (min)</label>
+                <div class="col-md-5">
+                    <input class="form-control" type="number" min="1" max="1440" value="30" name="duration">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-2">Every week</label>
+                <div class="col-md-5">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="everyweek" value="checked"> Check
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+    </head>
+</body>
+
+</html>
