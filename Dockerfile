@@ -7,6 +7,8 @@ RUN echo 'export GOPATH="/root/go"' >> ~/.bashrc
 RUN echo 'export GOROOT="/usr/local/go"' >> ~/.bashrc
 RUN echo 'export PATH=$GOROOT/bin:$GOPATH/bin:$PATH' >> ~/.bashrc
 RUN go get github.com/cs3238-tsuzu/recs4m
+RUN cp $GOPATH/src/github.com/cs3238-tsuzu/recs4m/upload.sh /root
+RUN chmod +x upload.sh
 WORKDIR /root
 
-ENTRYPOINT ["recs4m"]
+CMD ["recs4m"]
