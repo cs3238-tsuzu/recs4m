@@ -3,7 +3,7 @@
 [![Docker Build Status](https://img.shields.io/docker/build/tsuzu/recs4m.svg?style=flat-square)]()
 - MP3 stream recorder
 
-# Detail
+# Details
 - Record mp3 stream on http protocol
 - Then, upload recorded files(ex. Google Play Music/Google Drive)
 

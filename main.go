@@ -446,7 +446,12 @@ func main() {
 
 				return
 			}
-			defer fp.Close()
+			name := fp.Name()
+			defer func() {
+				fp.Close()
+
+				os.Remove(name)
+			}()
 			buf := make([]byte, 1024)
 			for {
 				n, err := resp.Body.Read(buf)
@@ -457,7 +462,7 @@ func main() {
 					return
 				}
 
-				if time.Now().Sub(startTime.Add(10*time.Second)) < 0 {
+				if time.Now().Sub(startTime.Add(-10*time.Second)) < 0 {
 					continue
 				}
 
@@ -472,7 +477,6 @@ func main() {
 				}
 			}
 
-			name := fp.Name()
 			fp.Close()
 
 			if err := os.Rename(name, name+".mp3"); err != nil {
@@ -480,6 +484,8 @@ func main() {
 
 				return
 			}
+
+			name = name + ".mp3"
 			resp.Body.Close()
 
 			output, err := exec.Command("sh", *uploadScript, name+".mp3", resv.Title, startTime.String()).CombinedOutput()

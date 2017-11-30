@@ -1,6 +1,7 @@
 FROM tsuzu/gmusic
 
 WORKDIR /tmp
+RUN apt-get install -yl language-pack-ja
 RUN wget https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz && tar zxvf go*.tar.gz
 RUN mv go*/ /usr/local/go && mkdir /root/go
 ENV GOPATH "/root/go"
