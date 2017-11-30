@@ -499,10 +499,6 @@ func main() {
 
 			logrus.WithField("output", string(output)).Debug("output of uploading process")
 			addNewLog(fmt.Sprintf("Successfully recorded and uploaded: %s(from: %s)", resv.Title, startTime.String()))
-
-			if err := os.Remove(name); err != nil {
-				logrus.WithError(err).Error("File removing error")
-			}
 		}
 
 		ticker := time.NewTicker(1 * time.Minute)
