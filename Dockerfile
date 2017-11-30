@@ -12,4 +12,4 @@ RUN chmod +x /root/upload.sh
 WORKDIR $GOPATH/src/github.com/cs3238-tsuzu/recs4m
 EXPOSE 80
 
-CMD ["recs4m"]
+CMD ["recs4m", "--upload-script", "/root/upload.sh"]

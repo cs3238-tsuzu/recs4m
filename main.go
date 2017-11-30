@@ -435,7 +435,7 @@ func main() {
 					continue
 				}
 
-				if time.Now().Sub(startTime.Add(time.Duration(resv.Duration))) >= 0 {
+				if time.Now().Sub(startTime.Add(time.Duration(resv.Duration)*time.Second)) >= 0 {
 					break
 				}
 
@@ -456,14 +456,16 @@ func main() {
 			}
 			resp.Body.Close()
 
-			_, err = exec.Command("sh", "-c", *uploadScript, name+".mp3", resv.Title, startTime.String()).CombinedOutput()
+			output, err := exec.Command("sh", *uploadScript, name+".mp3", resv.Title, startTime.String()).CombinedOutput()
 
 			if err != nil {
 				retErr = err
+				logrus.WithField("output", string(output)).Error("Execution error")
 
 				return
 			}
 
+			logrus.WithField("output", string(output)).Debug("output of uploading process")
 			addNewLog(fmt.Sprintf("Successfully recorded and uploaded: %s(from: %s)", resv.Title, startTime.String()))
 
 			if err := os.Remove(name); err != nil {

@@ -7,10 +7,11 @@
 
 # Usage
 - You should use this with Docker
-- $ docker run --name "random_name" -p 8080:80 tsuzu:recs4m
+- $ docker run --name "random_name" -p 8080:80 tsuzu/recs4m
 - Access localhost:8080 from a browser
 - $ docker exec -ti "random_named" bash
-- # gmupload and sign in to Google
+- If you want to upload to Google Play Music, execute gmupload and sign in to Google
+- Or,  you want to upload to other platforms, put a script in /root
 
 # License
 - Under the MIT License
