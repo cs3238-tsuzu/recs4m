@@ -83,6 +83,10 @@ func timeFromString(str string) (int, bool) {
 		return 0, false
 	}
 
+	if h < 0 || h >= 24 || m < 0 || m >= 60 {
+		return 0, false
+	}
+
 	return h*60 + m, true
 }
 
@@ -371,6 +375,28 @@ func main() {
 			rw.WriteHeader(http.StatusInternalServerError)
 
 			logrus.WithError(err).Error("/update error")
+		}
+
+		rw.Header().Set("Location", "/")
+		rw.WriteHeader(http.StatusFound)
+	})
+
+	router.HandleFunc("/clear_logs", func(rw http.ResponseWriter, req *http.Request) {
+		if err := db.Update(func(tx *bolt.Tx) error {
+			if err := tx.DeleteBucket(RecentLogsBucket); err != nil {
+				return err
+			}
+
+			if _, err := tx.CreateBucket(RecentLogsBucket); err != nil {
+				return err
+			}
+
+			return nil
+		}); err != nil {
+			logrus.WithError(err).Error("/clear_logs error")
+
+			rw.WriteHeader(http.StatusInternalServerError)
+			rw.Write([]byte("Internal Server Error"))
 		}
 
 		rw.Header().Set("Location", "/")
