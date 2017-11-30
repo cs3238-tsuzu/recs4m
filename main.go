@@ -435,7 +435,7 @@ func main() {
 					continue
 				}
 
-				if time.Now().Sub(startTime.Add(time.Duration(resv.Duration)*time.Second)) >= 0 {
+				if time.Now().Sub(startTime.Add(time.Duration(resv.Duration)*time.Minute)) >= 0 {
 					break
 				}
 
