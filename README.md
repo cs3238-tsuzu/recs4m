@@ -1,4 +1,6 @@
 # recs4m
+[![Docker Automated build](https://img.shields.io/docker/automated/tsuzu/recs4m.svg?style=flat-square)]()
+[![Docker Build Status](https://img.shields.io/docker/build/tsuzu/recs4m.svg?style=flat-square)]()
 - MP3 stream recorder
 
 # Detail
