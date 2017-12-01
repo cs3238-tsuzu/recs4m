@@ -488,7 +488,7 @@ func main() {
 			name = name + ".mp3"
 			resp.Body.Close()
 
-			output, err := exec.Command("sh", *uploadScript, name+".mp3", resv.Title, startTime.String()).CombinedOutput()
+			output, err := exec.Command("sh", *uploadScript, name, resv.Title, startTime.String()).CombinedOutput()
 
 			if err != nil {
 				retErr = err
