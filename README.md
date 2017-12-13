@@ -4,7 +4,7 @@
 - MP3 stream recorder
 
 # Details
-- Record mp3 stream on http protocol
+- Record a mp3 stream on http protocol
 - Then, upload recorded files(ex. Google Play Music/Google Drive)
 
 # Usage
