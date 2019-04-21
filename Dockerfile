@@ -12,4 +12,5 @@ RUN apt-get install -y language-pack-ja && \
     chmod +x /root/upload.sh
 
 EXPOSE 80
+WORKDIR /
 CMD ["recs4m", "--upload-script", "/root/upload.sh"]
