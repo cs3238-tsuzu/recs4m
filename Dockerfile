@@ -8,7 +8,9 @@ COPY --from=build /go/bin/recs4m /bin/
 COPY ./html /
 COPY ./upload.sh /root
 
-RUN apt-get install -y language-pack-ja && \
+RUN apt-get update && \
+    apt-get install -y language-pack-ja && \
+    rm -rf /var/lib/apt/lists/* && \
     chmod +x /root/upload.sh
 
 EXPOSE 80
